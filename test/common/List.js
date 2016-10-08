@@ -1,6 +1,7 @@
 const daggy = require('daggy')
 
 const Q = require('../../src/quasi.js')
+const equals = require('../../src/equals.js')
 const fl = require('../../src/fl.js')
 
 const List = daggy.taggedSum({
@@ -23,7 +24,7 @@ List.prototype[fl.equals] = function(b) {
     }),
     Cons: (x, xs) => b.cata({
       Nil: () => false,
-      Cons: (y, ys) => (x === y || x[fl.equals](y)) && xs[fl.equals](ys),
+      Cons: (y, ys) => equals(x,y) && xs[fl.equals](ys),
     }),
   })
 }

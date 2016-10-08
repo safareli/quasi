@@ -1,6 +1,7 @@
 const daggy = require('daggy')
 
 const Q = require('../../src/quasi.js')
+const equals = require('../../src/equals.js')
 const fl = require('../../src/fl.js')
 
 const Identity = daggy.tagged('value')
@@ -10,7 +11,7 @@ Identity[fl.of] = (a) => Identity(a)
 Identity[fl.empty] = Identity[fl.of](Q.empty)
 
 Identity.prototype[fl.equals] = function(b) {
-  return this.value === b.value || (typeof this.value[fl.equals] === 'function' && this.value[fl.equals](b.value))
+  return equals(this.value, b.value)
 }
 
 Identity.prototype[fl.chain] = function(f) {

@@ -1,4 +1,5 @@
 const fl = require('./fl.js')
+const equals = require('./equals.js')
 const key$of = '@functional/of'
 const key$empty = '@functional/empty'
 const isEmpty = m => m[key$empty] === true
@@ -18,7 +19,7 @@ const of = (a) => ({
   [fl.chain]: (f) => f(a),
   [fl.equals]: (b) => {
     if (isOf(b)) {
-      return a === b.value || (typeof a[fl.equals] === 'function' && a[fl.equals](b.value))
+      return equals(a, b.value)
     } else if (isEmpty(a)) {
       return isEmpty(b)
     } else if (typeof b.constructor[fl.of] === 'function') {

@@ -1,6 +1,7 @@
 const daggy = require('daggy')
 
 const Q = require('../../src/quasi.js')
+const equals = require('../../src/equals.js')
 const fl = require('../../src/fl.js')
 
 const Pair = daggy.tagged('_1', '_2')
@@ -17,6 +18,10 @@ Pair.prototype[fl.concat] = function(b) {
   } else {
     return Pair(this._1[fl.concat](b._1), this._2[fl.concat](b._2))
   }
+}
+
+Pair.prototype[fl.equals] = function(b) {
+  return equals(this._1, b._1) && equals(this._2, b._2)
 }
 
 Pair.prototype[fl.ap] = function(f) {

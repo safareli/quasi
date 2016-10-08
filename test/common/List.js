@@ -24,7 +24,7 @@ List.prototype[fl.equals] = function(b) {
     }),
     Cons: (x, xs) => b.cata({
       Nil: () => false,
-      Cons: (y, ys) => equals(x,y) && xs[fl.equals](ys),
+      Cons: (y, ys) => equals(x, y) && xs[fl.equals](ys),
     }),
   })
 }

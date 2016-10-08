@@ -3,6 +3,7 @@ const daggy = require('daggy')
 const Q = require('../../src/quasi.js')
 const equals = require('../../src/equals.js')
 const fl = require('../../src/fl.js')
+const flPatch = require('../../src/fl-patch.js')
 
 const List = daggy.taggedSum({
   Cons: ['x', 'xs'],
@@ -16,7 +17,7 @@ List.prototype.toString = function() {
   })
 }
 
-List.prototype[fl.equals] = function(b) {
+List.prototype.equals = function(b) {
   return this.cata({
     Nil: () => b.cata({
       Nil: () => true,
@@ -29,7 +30,7 @@ List.prototype[fl.equals] = function(b) {
   })
 }
 
-List.prototype[fl.concat] = function(ys) {
+List.prototype.concat = function(ys) {
   if (Q.isEmpty(ys)) {
     return this
   }
@@ -40,5 +41,7 @@ List.prototype[fl.concat] = function(ys) {
 }
 
 List.fromArray = (arr) => arr.reduceRight((acc, a) => List.Cons(a, acc), List.Nil)
+
+flPatch(List)
 
 module.exports = List

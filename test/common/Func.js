@@ -2,19 +2,20 @@ const daggy = require('daggy')
 
 const Q = require('../../src/quasi.js')
 const fl = require('../../src/fl.js')
+const flPatch = require('../../src/fl-patch.js')
 
 const Func = daggy.tagged('run')
 
-Func[fl.of] = (a) => Func((_) => a)
+Func.of = (a) => Func((_) => a)
 
-Func.prototype[fl.ap] = function(g) {
+Func.prototype.ap = function(g) {
   const f = this
   return Func((x) => Q.foldIfIsOf(Func[fl.of], g).run(x)(f.run(x)))
 }
 
-Func[fl.empty] = Func[fl.of](Q.empty)
+Func.empty = Func[fl.of](Q.empty)
 
-Func.prototype[fl.concat] = function(g) {
+Func.prototype.concat = function(g) {
   if (Q.isEmpty(g)) {
     return this
   }
@@ -30,5 +31,7 @@ Func.prototype[fl.concat] = function(g) {
     }
   })
 }
+
+flPatch(Func)
 
 module.exports = Func

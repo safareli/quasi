@@ -3,25 +3,26 @@ const daggy = require('daggy')
 const Q = require('../../src/quasi.js')
 const equals = require('../../src/equals.js')
 const fl = require('../../src/fl.js')
+const flPatch = require('../../src/fl-patch.js')
 
 const Identity = daggy.tagged('value')
 
-Identity[fl.of] = (a) => Identity(a)
+Identity.of = (a) => Identity(a)
 
-Identity[fl.empty] = Identity[fl.of](Q.empty)
+Identity.empty = Identity.of(Q.empty)
 
-Identity.prototype[fl.equals] = function(b) {
+Identity.prototype.equals = function(b) {
   return equals(this.value, b.value)
 }
 
-Identity.prototype[fl.chain] = function(f) {
+Identity.prototype.chain = function(f) {
   return f(this.value)
 }
 
 const chainRecNext = value => ({ isNext: true, value })
 const chainRecDone = value => ({ isNext: false, value })
 
-Identity[fl.chainRec] = function(f, i) {
+Identity.chainRec = function(f, i) {
   var state = chainRecNext(i)
   while (state.isNext) {
     state = f(chainRecNext, chainRecDone, state.value).value
@@ -29,7 +30,7 @@ Identity[fl.chainRec] = function(f, i) {
   return Identity(state.value)
 }
 
-Identity.prototype[fl.concat] = function(b) {
+Identity.prototype.concat = function(b) {
   b = Q.foldIfIsOf(Identity[fl.of], b)
   if (Q.isEmpty(this.value)) {
     return b
@@ -40,12 +41,14 @@ Identity.prototype[fl.concat] = function(b) {
   }
 }
 
-Identity.prototype[fl.ap] = function(f) {
+Identity.prototype.ap = function(f) {
   if (Q.isOf(f)) {
     return this.map(f.value)
   } else {
     return Identity(f.value(this.value))
   }
 }
+
+flPatch(Identity)
 
 module.exports = Identity

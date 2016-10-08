@@ -2,18 +2,19 @@ const daggy = require('daggy')
 
 const Q = require('../../src/quasi.js')
 const fl = require('../../src/fl.js')
+const flPatch = require('../../src/fl-patch.js')
 
 const Task = daggy.tagged('fork')
 
-Task[fl.of] = (a) => Task((rej, res) => res(a))
+Task.of = (a) => Task((rej, res) => res(a))
 
-Task[fl.empty] = Task[fl.of](Q.empty)
+Task.empty = Task[fl.of](Q.empty)
 
-Task.prototype[fl.map] = function(f) {
+Task.prototype.map = function(f) {
   return Task((rej, res) => this.fork(rej, (v) => res(f(v))))
 }
 
-Task.prototype[fl.concat] = function(g) {
+Task.prototype.concat = function(g) {
   if (Q.isEmpty(g)) {
     return this
   }
@@ -57,5 +58,7 @@ Task.parallel = function(a, b) {
     })
   })
 }
+
+flPatch(Task)
 
 module.exports = Task

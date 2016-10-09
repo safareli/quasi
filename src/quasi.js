@@ -65,13 +65,13 @@ Of.empty = {
   toString: () => '<empty>',
   equals: (a) => isEmpty(a) || (isOf(a) && isEmpty(a.value)),
   concat: (a) => a,
-  map: (_) => { throw new TypeError(methodNeedsValueErrorTpl('map'))},
-  ap: (_) => { throw new TypeError(methodNeedsValueErrorTpl('ap'))},
-  reduce: (_, _2) => { throw new TypeError(methodNeedsValueErrorTpl('reduce'))},
-  traverse: (_, _2) => { throw new TypeError(methodNeedsValueErrorTpl('traverse'))},
-  chain: (_) => { throw new TypeError(methodNeedsValueErrorTpl('chain'))},
+  map: (_) => { throw new TypeError(methodNeedsValueErrorTpl('map')) },
+  ap: (_) => { throw new TypeError(methodNeedsValueErrorTpl('ap')) },
+  reduce: (_, _2) => { throw new TypeError(methodNeedsValueErrorTpl('reduce')) },
+  traverse: (_, _2) => { throw new TypeError(methodNeedsValueErrorTpl('traverse')) },
+  chain: (_) => { throw new TypeError(methodNeedsValueErrorTpl('chain')) },
   extend: (f) => Of(f(Of.empty)),
-  extract: (_) => { throw new TypeError(methodNeedsValueErrorTpl('extract'))},
+  extract: (_) => { throw new TypeError(methodNeedsValueErrorTpl('extract')) },
 }
 
 // instance Functor m where

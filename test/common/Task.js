@@ -37,7 +37,7 @@ Task.prototype.map = function(f) {
 // instance => Apply (Task e) where
 //   ap :: Task e a -> Task e (a -> b) -> Task e b
 Task.prototype.ap = function(g) {
-  return Task.parallel(this, g).map(([v,f]) => f(v))
+  return Task.parallel(this, g).map(([v, f]) => f(v))
 }
 
 // instance => Applicative (Task e) where

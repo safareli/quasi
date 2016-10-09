@@ -65,23 +65,12 @@ const empty = {
   [key$empty]: true,
   constructor: Of,
   toString: () => '<empty>',
+  equals: (a) => isEmpty(a) || (isOf(a) && isEmpty(a.value)),
+  concat: (a) => a,
+  map: (_) => { throw new TypeError(methodNeedsValueErrorTpl('map'))},
+  ap: (_) => { throw new TypeError(methodNeedsValueErrorTpl('ap'))},
+  chain: (_) => { throw new TypeError(methodNeedsValueErrorTpl('chain'))},
 }
-
-empty.map = (_) => {
-  throw new TypeError(methodNeedsValueErrorTpl('map'))
-}
-
-empty.ap = (_) => {
-  throw new TypeError(methodNeedsValueErrorTpl('ap'))
-}
-
-empty.chain = (_) => {
-  throw new TypeError(methodNeedsValueErrorTpl('chain'))
-}
-
-empty.concat = a => a
-
-empty.equals = a => isEmpty(a) || (isOf(a) && isEmpty(a.value))
 
 Of.empty = empty
 

@@ -5,6 +5,8 @@ const key$of = '@functional/of'
 const key$empty = '@functional/empty'
 const isEmpty = m => m[key$empty] === true
 const isOf = a => a[key$of] === true
+const methodNeedsValueErrorTpl = (methodName) =>
+  'can not call [' + methodName + '] method as current instance does not contain a value'
 
 // `of` createas container for a value which currently has no type.
 // result could conforms to specifications: Functor, Apply,
@@ -17,24 +19,8 @@ function Of(value) {
   this.value = value
 }
 
-Of.prototype[key$of] = true
-
-Of.prototype.toString = function() {
-  return '<of>(' + this.value + ')'
-}
-
-Of.prototype.map = function(f) {
-  return Of(f(this.value))
-}
-
-Of.prototype.ap = function(f) {
-  return isOf(f) ? Of(f.value(this.value)) : f.constructor[fl.of](this.value)[fl.ap](f)
-}
-
-Of.prototype.chain = function(f) {
-  return f(this.value)
-}
-
+// instance Setoid a => Setoid (Identity a) where
+//   equals :: Identity a ~> Identity a -> Boolean
 Of.prototype.equals = function(b) {
   if (isOf(b)) {
     return equals(this.value, b.value)
@@ -47,6 +33,8 @@ Of.prototype.equals = function(b) {
   }
 }
 
+// instance Semigroup (m a) where
+//   concat :: m a ~> m a -> m a
 Of.prototype.concat = function(b) {
   if (isOf(b)) {
     return Of(this.value[fl.concat](b.value))
@@ -57,11 +45,10 @@ Of.prototype.concat = function(b) {
   }
 }
 
-const methodNeedsValueErrorTpl = (methodName) =>
-  'can not call [' + methodName + '] method as current instance does not contain a value'
-
 // it represents `empty` value of some Monoid, type is not know yet like result of `Of`
-const empty = {
+// instance Monoid (m a) where
+//   empty :: m a
+Of.empty = {
   [key$empty]: true,
   constructor: Of,
   toString: () => '<empty>',
@@ -72,12 +59,30 @@ const empty = {
   chain: (_) => { throw new TypeError(methodNeedsValueErrorTpl('chain'))},
 }
 
-Of.empty = empty
+// instance Functor m where
+//   map :: m a ~> (a -> b) -> m b
+Of.prototype.map = function(f) {
+  return Of(f(this.value))
+}
 
-Of.of = Of
+// instance Apply m where
+//   ap :: m a ~> m (a -> b) -> m b
+Of.prototype.ap = function(f) {
+  return isOf(f) ? Of(f.value(this.value)) : f.constructor[fl.of](this.value)[fl.ap](f)
+}
 
+// instance Applicative m where
+//   of :: a -> m a
+Of.of = (a) => Of(a)
 
+// instance Chain m where
+//   chain :: m a ~> (a -> m b) -> m b
+Of.prototype.chain = function(f) {
+  return f(this.value)
+}
 
+// instance ChainRec m where
+//   chainRec :: ((a -> c, b -> c, a) -> m c, a) -> m b
 Of.chainRec = (f, i) => {
   let step = f(chainRecNext, chainRecDone, i)
   while (isOf(step) && step.value.isNext) {
@@ -92,13 +97,18 @@ Of.chainRec = (f, i) => {
   )
 }
 
-const foldIfIsOf = (f, a) => isOf(a) ? f(a.value) : a
+Of.prototype[key$of] = true
 
+Of.prototype.toString = function() {
+  return '<of>(' + this.value + ')'
+}
+
+const foldIfIsOf = (f, a) => isOf(a) ? f(a.value) : a
 
 flPatch([Of, Of.prototype, Of.empty])
 
 module.exports = {
-  empty,
+  empty: Of.empty,
   isEmpty,
   of: Of,
   isOf,

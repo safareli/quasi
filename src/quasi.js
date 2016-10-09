@@ -57,7 +57,7 @@ Of.empty = {
   map: (_) => { throw new TypeError(methodNeedsValueErrorTpl('map'))},
   ap: (_) => { throw new TypeError(methodNeedsValueErrorTpl('ap'))},
   reduce: (_, _2) => { throw new TypeError(methodNeedsValueErrorTpl('reduce'))},
-  traverse: (_, _2) => { throw new TypeError(methodNeedsValueErrorTpl('reduce'))},
+  traverse: (_, _2) => { throw new TypeError(methodNeedsValueErrorTpl('traverse'))},
   chain: (_) => { throw new TypeError(methodNeedsValueErrorTpl('chain'))},
   extend: (f) => Of(f(Of.empty)),
 }

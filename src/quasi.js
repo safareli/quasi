@@ -59,6 +59,7 @@ Of.empty = {
   reduce: (_, _2) => { throw new TypeError(methodNeedsValueErrorTpl('reduce'))},
   traverse: (_, _2) => { throw new TypeError(methodNeedsValueErrorTpl('reduce'))},
   chain: (_) => { throw new TypeError(methodNeedsValueErrorTpl('chain'))},
+  extend: (f) => Of(f(Of.empty)),
 }
 
 // instance Functor m where
@@ -109,6 +110,12 @@ Of.chainRec = (f, i) => {
   return step[fl.chain](({ isNext, value }) =>
     isNext ? step.constructor[fl.chainRec](f, value) : step.constructor[fl.of](value)
   )
+}
+
+// instance Extend m where
+//   extend :: m a ~> (m a -> b) -> m b
+Of.prototype.extend = function(f) {
+  return Of(f(this))
 }
 
 Of.prototype[key$of] = true

@@ -32,6 +32,8 @@ test('eq', t => {
   t.eqFL(of(empty), of(empty).concat(of(empty)))
   t.eqFL(of(a), of(a).constructor.of(a))
   t.eqFL(Identity(of(a)), of(a).traverse((a) => Identity(a), Identity.of))
+  t.eqFL(of(Identity(of(a))), of(a).extend((a) => Identity(a)))
+  t.eqFL(of(Identity(of(empty))), empty.extend((a) => Identity(a)))
   t.eqFL(of(List.Cons(a, List.Nil)), of(a).reduce((acc,a) => List.Cons(a, acc), List.Nil))
   t.eqFL(of(empty), empty.concat(of(empty)))
   t.eqFL(of(empty), of(empty).concat(empty))

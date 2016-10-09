@@ -1,7 +1,7 @@
 const daggy = require('daggy')
 
 const Q = require('../../src/quasi.js')
-const equals = require('../../src/equals.js')
+const { equals } = require('../../src/shared.js')
 const fl = require('../../src/fl.js')
 const flPatch = require('../../src/fl-patch.js')
 

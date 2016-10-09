@@ -1,6 +1,6 @@
 const { test, Test } = require('tap')
 
-const equals = require('../../src/equals.js')
+const { equals } = require('../../src/shared.js')
 
 Test.prototype.addAssert('eqFL', 2, function(f, w, m, e) {
   m = m || 'should be equal'

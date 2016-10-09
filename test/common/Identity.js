@@ -1,7 +1,7 @@
 const daggy = require('daggy')
 
 const Q = require('../../src/quasi.js')
-const equals = require('../../src/equals.js')
+const { equals, chainRecNext, chainRecDone } = require('../../src/shared.js')
 const fl = require('../../src/fl.js')
 const flPatch = require('../../src/fl-patch.js')
 
@@ -56,9 +56,6 @@ Identity.of = (a) => Identity(a)
 Identity.prototype.chain = function(f) {
   return f(this.value)
 }
-
-const chainRecNext = value => ({ isNext: true, value })
-const chainRecDone = value => ({ isNext: false, value })
 
 // instance ChainRec Identity where
 //   chainRec :: ((a -> c, b -> c, a) -> Identity c, a) -> Identity b

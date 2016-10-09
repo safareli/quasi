@@ -1,6 +1,6 @@
 const fl = require('./fl.js')
 const flPatch = require('./fl-patch.js')
-const equals = require('./equals.js')
+const { equals, chainRecNext, chainRecDone } = require('./shared.js')
 const key$of = '@functional/of'
 const key$empty = '@functional/empty'
 const isEmpty = m => m[key$empty] === true
@@ -76,9 +76,7 @@ Of.empty = empty
 
 Of.of = Of
 
-const chainRecNext = value => ({ isNext: true, value })
 
-const chainRecDone = value => ({ isNext: false, value })
 
 Of.chainRec = (f, i) => {
   let step = f(chainRecNext, chainRecDone, i)

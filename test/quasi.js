@@ -1,6 +1,6 @@
 const { test } = require('./lib')
 
-const { of, empty } = require('../src/quasi.js')
+const { of, empty, chainRec } = require('../src/quasi.js')
 
 const Identity = require('./common/Identity.js')
 const List = require('./common/List.js')
@@ -12,7 +12,7 @@ test('eq', t => {
   const a = 'a'
   const as = List.Cons(a, List.Nil)
   t.notThrow(() => {
-    t.eqFL(of(0), of.chainRec((next, done, v) => of(v === 0 ? done(v) : next(v - 1)), 100000))
+    t.eqFL(of(0), chainRec((next, done, v) => of(v === 0 ? done(v) : next(v - 1)), 100000))
   }, 'chainRec is stacksafe')
   t.throws(() => { empty.map(a => a) }, 'throws on method calls which need value', TypeError)
   t.throws(() => { empty.ap(a => a) }, 'throws on method calls which need value', TypeError)
@@ -20,8 +20,8 @@ test('eq', t => {
   t.throws(() => { empty.reduce((acc, a) => List.Cons(a, acc), List.Nil) }, 'throws on method calls which need value', TypeError)
   t.throws(() => { empty.traverse(a => a) }, 'throws on method calls which need value', TypeError)
   t.throws(() => { empty.extract(a => a) }, 'throws on method calls which need value', TypeError)
-  t.eqFL(Identity(0), of.chainRec((next, done, v) => Identity(v === 0 ? done(v) : next(v - 1)), 10))
-  t.eqFL(Identity(10), of.chainRec((_, done, v) => Identity(done(v)), 10))
+  t.eqFL(Identity(0), chainRec((next, done, v) => Identity(v === 0 ? done(v) : next(v - 1)), 10))
+  t.eqFL(Identity(10), chainRec((_, done, v) => Identity(done(v)), 10))
   t.eqFL('<of>(a)', of(a).toString())
   t.eqFL('<of>(<empty>)', of(empty).toString())
   t.ok(of(a).equals(Identity.of(a)))

@@ -138,7 +138,8 @@ flPatch([Of, Of.prototype, Of.empty])
 module.exports = {
   empty: Of.empty,
   isEmpty,
-  of: Of,
+  of: Of.of,
   isOf,
+  chainRec: Of.chainRec,
   foldIfIsOf,
 }

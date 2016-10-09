@@ -60,6 +60,7 @@ Of.empty = {
   traverse: (_, _2) => { throw new TypeError(methodNeedsValueErrorTpl('traverse'))},
   chain: (_) => { throw new TypeError(methodNeedsValueErrorTpl('chain'))},
   extend: (f) => Of(f(Of.empty)),
+  extract: (_) => { throw new TypeError(methodNeedsValueErrorTpl('extract'))},
 }
 
 // instance Functor m where
@@ -116,6 +117,12 @@ Of.chainRec = (f, i) => {
 //   extend :: m a ~> (m a -> b) -> m b
 Of.prototype.extend = function(f) {
   return Of(f(this))
+}
+
+// instance Comonad m where
+//   extract :: m a ~> () -> a
+Of.prototype.extract = function() {
+  return this.value
 }
 
 Of.prototype[key$of] = true

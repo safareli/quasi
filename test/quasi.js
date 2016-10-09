@@ -28,6 +28,7 @@ test('eq', t => {
   t.ok(empty.equals(empty))
   t.notOk(of(a).equals(a))
   t.eqFL(of(empty), of(empty).concat(of(empty)))
+  t.eqFL(of(a), of(a).constructor.of(a))
   t.eqFL(of(empty), empty.concat(of(empty)))
   t.eqFL(of(empty), of(empty).concat(empty))
   t.eqFL(Identity(as), of(as).concat(Identity(List.Nil)))

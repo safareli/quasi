@@ -4,16 +4,25 @@ const Q = require('../../src/quasi.js')
 const fl = require('../../src/fl.js')
 const flPatch = require('../../src/fl-patch.js')
 
+// type Task e a = Task ((e -> (), a -> ()) -> ())
 const Task = daggy.tagged('fork')
 
+// instance => Pointed Task where
+//   of :: a -> Task e a
 Task.of = (a) => Task((rej, res) => res(a))
 
+// instance Monoid a => Monoid (Task e a) where
+//   empty :: Task e a
 Task.empty = Task[fl.of](Q.empty)
 
+// instance Functor Task where
+//   map :: Task e a ~> (a -> b) -> Task e b
 Task.prototype.map = function(f) {
   return Task((rej, res) => this.fork(rej, (v) => res(f(v))))
 }
 
+// instance Semigroup a => Semigroup (Task e a) where
+//   concat :: Task e a ~> Task e a -> Task e a
 Task.prototype.concat = function(g) {
   if (Q.isEmpty(g)) {
     return this

@@ -5,16 +5,25 @@ const equals = require('../../src/equals.js')
 const fl = require('../../src/fl.js')
 const flPatch = require('../../src/fl-patch.js')
 
+// type Identity a = Identity a
 const Identity = daggy.tagged('value')
 
+// instance Pointed Identity where
+//   of :: a -> Identity a
 Identity.of = (a) => Identity(a)
 
+// instance Monoid a => Monoid (Identity a) where
+//   empty :: Identity a
 Identity.empty = Identity.of(Q.empty)
 
+// instance Setoid a => Setoid (Identity a) where
+//   empty :: Identity a ~> Identity a -> Boolean
 Identity.prototype.equals = function(b) {
   return equals(this.value, b.value)
 }
 
+// instance Chain Identity where
+//   chain :: Identity a ~> (a -> Identity b) -> Identity b
 Identity.prototype.chain = function(f) {
   return f(this.value)
 }
@@ -22,6 +31,8 @@ Identity.prototype.chain = function(f) {
 const chainRecNext = value => ({ isNext: true, value })
 const chainRecDone = value => ({ isNext: false, value })
 
+// instance ChainRec Identity where
+//   chainRec :: ((a -> c, b -> c, a) -> Identity c, a) -> Identity b
 Identity.chainRec = function(f, i) {
   var state = chainRecNext(i)
   while (state.isNext) {
@@ -30,6 +41,8 @@ Identity.chainRec = function(f, i) {
   return Identity(state.value)
 }
 
+// instance Semigroup a => Semigroup (Identity a) where
+//   concat :: Identity a ~> Identity a -> Identity a
 Identity.prototype.concat = function(b) {
   b = Q.foldIfIsOf(Identity[fl.of], b)
   if (Q.isEmpty(this.value)) {
@@ -41,6 +54,8 @@ Identity.prototype.concat = function(b) {
   }
 }
 
+// instance Apply Identity where
+//   ap :: Identity a ~> Identity (a -> b) -> Identity b
 Identity.prototype.ap = function(f) {
   if (Q.isOf(f)) {
     return this.map(f.value)

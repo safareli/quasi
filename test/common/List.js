@@ -5,6 +5,7 @@ const equals = require('../../src/equals.js')
 const fl = require('../../src/fl.js')
 const flPatch = require('../../src/fl-patch.js')
 
+// type List a = Nil | Cons a (List a)
 const List = daggy.taggedSum({
   Cons: ['x', 'xs'],
   Nil: [],
@@ -17,6 +18,8 @@ List.prototype.toString = function() {
   })
 }
 
+// instance Setoid a => Setoid (List a) where
+//   empty :: List a ~> List a -> Boolean
 List.prototype.equals = function(b) {
   return this.cata({
     Nil: () => b.cata({
@@ -30,6 +33,8 @@ List.prototype.equals = function(b) {
   })
 }
 
+// instance Semigroup List where
+//   concat :: List a ~> List a -> List a
 List.prototype.concat = function(ys) {
   if (Q.isEmpty(ys)) {
     return this

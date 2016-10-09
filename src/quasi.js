@@ -56,6 +56,7 @@ Of.empty = {
   concat: (a) => a,
   map: (_) => { throw new TypeError(methodNeedsValueErrorTpl('map'))},
   ap: (_) => { throw new TypeError(methodNeedsValueErrorTpl('ap'))},
+  reduce: (_, _2) => { throw new TypeError(methodNeedsValueErrorTpl('reduce'))},
   chain: (_) => { throw new TypeError(methodNeedsValueErrorTpl('chain'))},
 }
 
@@ -75,6 +76,11 @@ Of.prototype.ap = function(f) {
 //   of :: a -> m a
 Of.of = (a) => Of(a)
 
+// instance Foldable m where
+//   reduce :: m a ~> ((b, a) -> b) -> b -> m b
+Of.prototype.reduce = function(f, i) {
+  return Of(f(i, this.value))
+}
 // instance Chain m where
 //   chain :: m a ~> (a -> m b) -> m b
 Of.prototype.chain = function(f) {

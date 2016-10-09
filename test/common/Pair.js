@@ -48,6 +48,6 @@ Pair.prototype.ap = function(f) {
 //   of :: a -> Pair a
 Pair.of = (a) => Pair(Q.empty, a)
 
-flPatch(Pair)
+flPatch([Pair, Pair.prototype]
 
 module.exports = Pair

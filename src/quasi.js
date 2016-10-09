@@ -96,9 +96,8 @@ Of.chainRec = (f, i) => {
 
 const foldIfIsOf = (f, a) => isOf(a) ? f(a.value) : a
 
-flPatch(Of)
 
-flPatch(empty)
+flPatch([Of, Of.prototype, Of.empty])
 
 module.exports = {
   empty,

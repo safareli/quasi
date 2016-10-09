@@ -9,7 +9,7 @@ const flPatch = require('../../src/fl-patch.js')
 const Identity = daggy.tagged('value')
 
 // instance Setoid a => Setoid (Identity a) where
-//   empty :: Identity a ~> Identity a -> Boolean
+//   equals :: Identity a ~> Identity a -> Boolean
 Identity.prototype.equals = function(b) {
   return equals(this.value, b.value)
 }
@@ -70,6 +70,6 @@ Identity.chainRec = function(f, i) {
   return Identity(state.value)
 }
 
-flPatch(Identity)
+flPatch([Identity, Identity.prototype])
 
 module.exports = Identity

@@ -51,6 +51,6 @@ List.prototype.toString = function() {
 
 List.fromArray = (arr) => arr.reduceRight((acc, a) => List.Cons(a, acc), List.Nil)
 
-flPatch(List)
+flPatch([List, List.prototype])
 
 module.exports = List

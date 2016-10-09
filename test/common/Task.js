@@ -74,6 +74,6 @@ Task.parallel = function(a, b) {
   })
 }
 
-flPatch(Task)
+flPatch([Task, Task.prototype])
 
 module.exports = Task

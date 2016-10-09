@@ -47,6 +47,6 @@ Func.prototype.ap = function(g) {
 //   of :: b -> Func a b
 Func.of = (a) => Func((_) => a)
 
-flPatch(Func)
+flPatch([Func, Func.prototype])
 
 module.exports = Func

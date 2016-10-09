@@ -57,6 +57,7 @@ Of.empty = {
   map: (_) => { throw new TypeError(methodNeedsValueErrorTpl('map'))},
   ap: (_) => { throw new TypeError(methodNeedsValueErrorTpl('ap'))},
   reduce: (_, _2) => { throw new TypeError(methodNeedsValueErrorTpl('reduce'))},
+  traverse: (_, _2) => { throw new TypeError(methodNeedsValueErrorTpl('reduce'))},
   chain: (_) => { throw new TypeError(methodNeedsValueErrorTpl('chain'))},
 }
 
@@ -81,6 +82,13 @@ Of.of = (a) => Of(a)
 Of.prototype.reduce = function(f, i) {
   return Of(f(i, this.value))
 }
+
+// instance Traversable m where
+//   traverse :: Apply f => m a ~> ((a -> f b), (c -> f c)) -> f (m b)
+Of.prototype.traverse = function(f, of) {
+  return f(this.value)[fl.map](Of[fl.of])
+}
+
 // instance Chain m where
 //   chain :: m a ~> (a -> m b) -> m b
 Of.prototype.chain = function(f) {

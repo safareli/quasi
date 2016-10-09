@@ -7,21 +7,6 @@ const flPatch = require('../../src/fl-patch.js')
 // type Func a b = Func (a -> b)
 const Func = daggy.tagged('run')
 
-// instance Pointed (Func a) where
-//   of :: b -> Func a b
-Func.of = (a) => Func((_) => a)
-
-// instance Apply (Func a) where
-//   ap :: Func a b ~> Func a (b -> c)  -> Func a c
-Func.prototype.ap = function(g) {
-  const f = this
-  return Func((x) => Q.foldIfIsOf(Func[fl.of], g).run(x)(f.run(x)))
-}
-
-// instance Monoid b => Monoid (Func a b) where
-//   empty :: Func a b
-Func.empty = Func[fl.of](Q.empty)
-
 // instance Semigroup b => Semigroup (Func a b) where
 //   concat :: Func a b ~> Func a b -> Func a b
 Func.prototype.concat = function(g) {
@@ -40,6 +25,27 @@ Func.prototype.concat = function(g) {
     }
   })
 }
+
+// instance Monoid b => Monoid (Func a b) where
+//   empty :: Func a b
+Func.empty = Func((_) => Q.empty)
+
+// instance Functor (Func a) where
+//   map :: Func a b ~> (b -> c)  -> Func a c
+Func.prototype.map = function(f) {
+  return Func((x) => f(this.run(x)))
+}
+
+// instance Apply (Func a) where
+//   ap :: Func a b ~> Func a (b -> c)  -> Func a c
+Func.prototype.ap = function(g) {
+  const f = this
+  return Func((x) => Q.foldIfIsOf(Func[fl.of], g).run(x)(f.run(x)))
+}
+
+// instance Applicative (Func a) where
+//   of :: b -> Func a b
+Func.of = (a) => Func((_) => a)
 
 flPatch(Func)
 

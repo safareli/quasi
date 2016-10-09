@@ -11,15 +11,8 @@ const List = daggy.taggedSum({
   Nil: [],
 })
 
-List.prototype.toString = function() {
-  return this.cata({
-    Nil: () => 'Nil',
-    Cons: (x, xs) => 'Cons(' + x + ',' + xs + ')',
-  })
-}
-
 // instance Setoid a => Setoid (List a) where
-//   empty :: List a ~> List a -> Boolean
+//   equals :: List a ~> List a -> Boolean
 List.prototype.equals = function(b) {
   return this.cata({
     Nil: () => b.cata({
@@ -42,6 +35,17 @@ List.prototype.concat = function(ys) {
   return this.cata({
     Nil: () => ys,
     Cons: (x, xs) => List.Cons(x, xs[fl.concat](ys)),
+  })
+}
+
+// instance Monoid List where
+//   empty :: List a
+List.empty = List.Nil
+
+List.prototype.toString = function() {
+  return this.cata({
+    Nil: () => 'Nil',
+    Cons: (x, xs) => 'Cons(' + x + ',' + xs + ')',
   })
 }
 

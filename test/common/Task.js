@@ -7,20 +7,6 @@ const flPatch = require('../../src/fl-patch.js')
 // type Task e a = Task ((e -> (), a -> ()) -> ())
 const Task = daggy.tagged('fork')
 
-// instance => Pointed Task where
-//   of :: a -> Task e a
-Task.of = (a) => Task((rej, res) => res(a))
-
-// instance Monoid a => Monoid (Task e a) where
-//   empty :: Task e a
-Task.empty = Task[fl.of](Q.empty)
-
-// instance Functor Task where
-//   map :: Task e a ~> (a -> b) -> Task e b
-Task.prototype.map = function(f) {
-  return Task((rej, res) => this.fork(rej, (v) => res(f(v))))
-}
-
 // instance Semigroup a => Semigroup (Task e a) where
 //   concat :: Task e a ~> Task e a -> Task e a
 Task.prototype.concat = function(g) {
@@ -37,6 +23,26 @@ Task.prototype.concat = function(g) {
     }
   })
 }
+
+// instance Monoid a => Monoid (Task e a) where
+//   empty :: Task e a
+Task.empty = Task((_, res) => res(Q.empty))
+
+// instance Functor (Task e) where
+//   map :: Task e a ~> (a -> b) -> Task e b
+Task.prototype.map = function(f) {
+  return Task((rej, res) => this.fork(rej, (v) => res(f(v))))
+}
+
+// instance => Apply (Task e) where
+//   ap :: Task e a -> Task e (a -> b) -> Task e b
+Task.prototype.ap = function(g) {
+  return Task.parallel(this, g).map(([v,f]) => f(v))
+}
+
+// instance => Applicative (Task e) where
+//   of :: a -> Task e a
+Task.of = (a) => Task((rej, res) => res(a))
 
 Task.parallel = function(a, b) {
   return Task((rej, res) => {

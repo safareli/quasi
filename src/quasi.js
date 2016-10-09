@@ -8,9 +8,21 @@ const isOf = a => a[key$of] === true
 const methodNeedsValueErrorTpl = (methodName) =>
   'can not call [' + methodName + '] method as current instance does not contain a value'
 
-// `of` createas container for a value which currently has no type.
-// result could conforms to specifications: Functor, Apply,
-// Applicative, Chain, ChainRec, Monad, Semigroup, Monoid and Setoid
+// `Of` conforms to Fantasy Land specifications:
+// - Setoid
+// - Semigroup
+// - Monoid
+// - Functor
+// - Apply
+// - Applicative
+// - Foldable
+// - Traversable
+// - Chain
+// - ChainRec
+// - Monad
+// - Extend
+// - Comonad
+
 //    of :: a => m a
 function Of(value) {
   if (!(this instanceof Of)) {
@@ -45,7 +57,6 @@ Of.prototype.concat = function(b) {
   }
 }
 
-// it represents `empty` value of some Monoid, type is not know yet like result of `Of`
 // instance Monoid (m a) where
 //   empty :: m a
 Of.empty = {
@@ -136,10 +147,21 @@ const foldIfIsOf = (f, a) => isOf(a) ? f(a.value) : a
 flPatch([Of, Of.prototype, Of.empty])
 
 module.exports = {
+  // represents `empty` value of some Monoid which currently has no type.
   empty: Of.empty,
+
+  // checks if a value is typeless empty value
   isEmpty,
+
+  // createas container for a value which currently has no type.
   of: Of.of,
+
+  // checks if a value is typeless container
   isOf,
+
+  // TK
   chainRec: Of.chainRec,
+
+  // TK
   foldIfIsOf,
 }

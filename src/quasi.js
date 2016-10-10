@@ -1,10 +1,16 @@
 const fl = require('./fl.js')
 const flPatch = require('./fl-patch.js')
 const { equals, chainRecNext, chainRecDone } = require('./shared.js')
+
 const key$of = '@functional/of'
 const key$empty = '@functional/empty'
+
+//    isEmpty :: m -> Boolean
 const isEmpty = m => m[key$empty] === true
+
+//    isOf :: m -> Boolean
 const isOf = a => a[key$of] === true
+
 const methodNeedsValueErrorTpl = (methodName) =>
   'can not call [' + methodName + '] method as current instance does not contain a value'
 
@@ -142,26 +148,27 @@ Of.prototype.toString = function() {
   return '<of>(' + this.value + ')'
 }
 
+//    foldIfIsOf :: (a -> m a) -> (Of | m) a -> m a
 const foldIfIsOf = (f, a) => isOf(a) ? f(a.value) : a
 
 flPatch([Of, Of.prototype, Of.empty])
 
 module.exports = {
+  // createas container for a value which currently has no type.
+  of: Of.of,
+
   // represents `empty` value of some Monoid which currently has no type.
   empty: Of.empty,
 
-  // checks if a value is typeless empty value
-  isEmpty,
-
-  // createas container for a value which currently has no type.
-  of: Of.of,
+  // does chain recurtion without knowing type of result structure
+  chainRec: Of.chainRec,
 
   // checks if a value is typeless container
   isOf,
 
-  // TK
-  chainRec: Of.chainRec,
+  // checks if a value is typeless empty value
+  isEmpty,
 
-  // TK
+  // way to convert posibly typeless value to typed one
   foldIfIsOf,
 }

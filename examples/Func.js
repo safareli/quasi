@@ -1,8 +1,8 @@
 const daggy = require('daggy')
 
-const Q = require('../../src/quasi.js')
-const fl = require('../../src/fl.js')
-const flPatch = require('../../src/fl-patch.js')
+const Q = require('../src/quasi.js')
+const fl = require('../src/fl.js')
+const flPatch = require('../src/fl-patch.js')
 
 // type Func a b = Func (a -> b)
 const Func = daggy.tagged('run')

@@ -1,9 +1,9 @@
 const daggy = require('daggy')
 
-const Q = require('../../src/quasi.js')
-const { equals } = require('../../src/shared.js')
-const fl = require('../../src/fl.js')
-const flPatch = require('../../src/fl-patch.js')
+const Q = require('../src/quasi.js')
+const { equals } = require('../src/shared.js')
+const fl = require('../src/fl.js')
+const flPatch = require('../src/fl-patch.js')
 
 // type List a = Nil | Cons a (List a)
 const List = daggy.taggedSum({

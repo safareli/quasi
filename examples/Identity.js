@@ -1,9 +1,9 @@
 const daggy = require('daggy')
 
-const Q = require('../../src/quasi.js')
-const { equals, chainRecNext, chainRecDone } = require('../../src/shared.js')
-const fl = require('../../src/fl.js')
-const flPatch = require('../../src/fl-patch.js')
+const Q = require('../src/quasi.js')
+const { equals, chainRecNext, chainRecDone } = require('../src/shared.js')
+const fl = require('../src/fl.js')
+const flPatch = require('../src/fl-patch.js')
 
 // type Identity a = Identity a
 const Identity = daggy.tagged('value')

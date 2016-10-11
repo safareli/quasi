@@ -1,9 +1,9 @@
 const daggy = require('daggy')
 
-const Q = require('../../src/quasi.js')
-const { equals } = require('../../src/shared.js')
-const fl = require('../../src/fl.js')
-const flPatch = require('../../src/fl-patch.js')
+const Q = require('../src/quasi.js')
+const { equals } = require('../src/shared.js')
+const fl = require('../src/fl.js')
+const flPatch = require('../src/fl-patch.js')
 
 // type Pair a b = Pair a b
 const Pair = daggy.tagged('_1', '_2')

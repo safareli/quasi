@@ -1,8 +1,8 @@
 const daggy = require('daggy')
 
-const Q = require('../../src/quasi.js')
-const fl = require('../../src/fl.js')
-const flPatch = require('../../src/fl-patch.js')
+const Q = require('../src/quasi.js')
+const fl = require('../src/fl.js')
+const flPatch = require('../src/fl-patch.js')
 
 // type Task e a = Task ((e -> (), a -> ()) -> ())
 const Task = daggy.tagged('fork')

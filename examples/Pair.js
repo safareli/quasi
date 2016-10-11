@@ -16,11 +16,16 @@ Pair.prototype.equals = function(b) {
 
 // instance (Semigroup a, Semigroup b) => Semigroup (Pair a b) where
 //   concat :: Pair a b ~> Pair a b -> Pair a b
-Pair.prototype.concat = function(b) {
+Pair.prototype.concat = function(x) {
+  const b = Q.foldIfIsOf(Pair[fl.of], x)
   if (Q.isEmpty(this._1) || Q.isEmpty(this._2)) {
-    return b
-  } else if (Q.isEmpty(b) || Q.isEmpty(b._1) || Q.isEmpty(b._2)) {
+    return Pair(this._1[fl.concat](b._1), this._2[fl.concat](b._2))
+  } else if (Q.isEmpty(b) || (Q.isEmpty(b._1) && Q.isEmpty(b._2))) {
     return this
+  } else if (Q.isEmpty(b._1)) {
+    return Pair(this._1, this._2[fl.concat](b._2))
+  } else if (Q.isEmpty(b._2)) {
+    return Pair(this._1[fl.concat](b._1), this._2)
   } else {
     return Pair(this._1[fl.concat](b._1), this._2[fl.concat](b._2))
   }
@@ -47,6 +52,10 @@ Pair.prototype.ap = function(f) {
 // instance (Monoid a) => Applicative (Pair a b) where
 //   of :: a -> Pair a
 Pair.of = (a) => Pair(Q.empty, a)
+
+Pair.prototype.toString = function() {
+  return 'Pair(' + this._1 + ',' + this._2 + ')'
+}
 
 flPatch([Pair, Pair.prototype])
 

@@ -39,8 +39,7 @@ Func.prototype.map = function(f) {
 // instance Apply (Func a) where
 //   ap :: Func a b ~> Func a (b -> c)  -> Func a c
 Func.prototype.ap = function(g) {
-  const f = this
-  return Func((x) => Q.foldIfIsOf(Func[fl.of], g).run(x)(f.run(x)))
+  return this.map(x => Q.foldIfIsOf(Func[fl.of], g).run(x)(x))
 }
 
 // instance Applicative (Func a) where

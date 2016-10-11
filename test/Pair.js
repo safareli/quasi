@@ -1,0 +1,32 @@
+const { test } = require('./lib')
+
+const { of, empty } = require('../src/quasi.js')
+
+const Pair = require('../examples/Pair.js')
+const List = require('../examples/List.js')
+
+test('eq', t => {
+  const a = 'a'
+  const as = List.fromArray([a])
+  const a2s = List.fromArray([a, a])
+  t.equals('Pair(a,a)', Pair(a, a).toString())
+  t.eqFL(Pair(as, as), Pair(empty, empty).concat(Pair(as, as)))
+  t.eqFL(Pair(as, as), Pair(as, as).concat(Pair(empty, empty)))
+  t.eqFL(Pair(a2s, as), Pair(as, empty).concat(Pair(as, as)))
+  t.eqFL(Pair(as, a2s), Pair(empty, as).concat(Pair(as, as)))
+  t.eqFL(Pair(as, as), Pair(as, as).concat(empty))
+  t.eqFL(Pair(as, as), empty.concat(Pair(as, as)))
+  t.eqFL(Pair(a2s, as), Pair(as, as).concat(Pair(as, empty)))
+  t.eqFL(Pair(as, a2s), Pair(as, as).concat(Pair(empty, as)))
+  t.eqFL(Pair(as, a2s), Pair(as, as).concat(of(as)))
+  t.eqFL(Pair(as, as), Pair(as, as).concat(Pair(empty, empty)))
+  t.eqFL(Pair(a2s, a2s), Pair(as, as).concat(Pair(as, as)))
+  t.eqFL(Pair(a2s, as), Pair(as, as).concat(Pair(as, empty)))
+  t.eqFL(Pair(as, a2s), Pair(as, as).concat(of(as)))
+  t.eqFL(Pair(as, a2s), of(as).concat(Pair(as, as)))
+  t.eqFL(Pair(as, as), Pair(as, as).ap(Pair.of(as => as)))
+  t.eqFL(Pair(as, as), Pair(as, as).ap(of(as => as)))
+  t.eqFL(Pair(a2s, as), Pair(as, as).ap(Pair(as, as => as)))
+  t.eqFL(Pair(as, a2s), Pair(as, as).map((as) => as.concat(as)))
+  t.end()
+})

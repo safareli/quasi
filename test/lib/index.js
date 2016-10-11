@@ -7,8 +7,8 @@ Test.prototype.addAssert('eqFL', 2, function(f, w, m, e) {
   if (f === w || equals(f, w)) {
     return this.pass(m, e)
   }
-  e.found = f
-  e.wanted = w
+  e.found = f.toString()
+  e.wanted = w.toString()
   e.compare = 'fantasy-land/equals'
   return this.fail(m, e)
 })
